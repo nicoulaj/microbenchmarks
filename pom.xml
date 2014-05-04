@@ -87,6 +87,8 @@
     <benchmark.results-format>SCSV</benchmark.results-format>
     <benchmark.warmup-mode>INDI</benchmark.warmup-mode>
 
+    <skipTests>false</skipTests>
+
   </properties>
 
   <dependencies>
@@ -127,7 +129,7 @@
               <goal>exec</goal>
             </goals>
             <configuration>
-              <classpathScope>test</classpathScope>
+              <skip>${skipTests}</skip>
               <executable>java</executable>
               <arguments>
                 <argument>-classpath</argument>
