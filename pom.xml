@@ -59,8 +59,8 @@
   </issueManagement>
 
   <ciManagement>
-    <system>Cloudbees BuildHive</system>
-    <url>https://buildhive.cloudbees.com/job/nicoulaj/job/microbenchmarks</url>
+    <system>Travis CI</system>
+    <url>https://travis-ci.org/nicoulaj/microbenchmarks</url>
   </ciManagement>
 
   <distributionManagement>
