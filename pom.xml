@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2012-2014 Julien Nicoulaud <julien.nicoulaud@gmail.com>.
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a
+  ~ copy of this software and associated documentation files (the "Software"),
+  ~ to deal in the Software without restriction, including without limitation
+  ~ the rights to use, copy, modify, merge, publish, distribute, sublicense,
+  ~ and/or sell copies of the Software, and to permit persons to whom the
+  ~ Software is furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included
+  ~ in all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+  ~ OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+  ~ THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>net.ju-n</groupId>
+    <artifactId>net-ju-n-parent</artifactId>
+    <version>28</version>
+  </parent>
+
+  <groupId>net.ju-n.microbenchmarks</groupId>
+  <artifactId>microbenchmarks</artifactId>
+  <version>1-SNAPSHOT</version>
+
+  <name>microbenchmarks</name>
+  <inceptionYear>2012</inceptionYear>
+  <description>Java microbenchmarks.</description>
+  <url>http://github.com/nicoulaj/microbenchmarks</url>
+
+  <licenses>
+    <license>
+      <name>The MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>http://github.com/nicoulaj/microbenchmarks</url>
+    <connection>scm:git:git@github.com:nicoulaj/microbenchmarks.git</connection>
+    <developerConnection>scm:git:git@github.com:nicoulaj/microbenchmarks.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <issueManagement>
+    <system>Github</system>
+    <url>http://github.com/nicoulaj/microbenchmarks/issues</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>Cloudbees BuildHive</system>
+    <url>https://buildhive.cloudbees.com/job/nicoulaj/job/microbenchmarks</url>
+  </ciManagement>
+
+  <distributionManagement>
+    <site>
+      <id>github</id>
+      <url>gitsite:git@github.com/nicoulaj/microbenchmarks.git</url>
+    </site>
+  </distributionManagement>
+
+  <properties>
+
+    <java.level>1.8</java.level>
+
+    <jmh.version>0.6</jmh.version>
+    <commons-math.version>3.2</commons-math.version>
+
+    <benchmarks>.*</benchmarks>
+    <benchmark.synchronize-iterations>false</benchmark.synchronize-iterations>
+    <benchmark.gc-between-iterations>true</benchmark.gc-between-iterations>
+    <benchmark.fail-on-error>true</benchmark.fail-on-error>
+    <benchmark.verbosity>normal</benchmark.verbosity>
+    <benchmark.results-file>${project.build.directory}/${project.artifactId}.csv</benchmark.results-file>
+    <benchmark.jvm-args>-server -Xms1G -Xmx1G -XX:+AlwaysPreTouch</benchmark.jvm-args>
+    <benchmark.results-format>SCSV</benchmark.results-format>
+    <benchmark.warmup-mode>INDI</benchmark.warmup-mode>
+
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>${commons-math.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>${jmh.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-generator-annprocess</artifactId>
+      <version>${jmh.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.level}</source>
+          <target>${java.level}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>run-benchmarks</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <classpathScope>test</classpathScope>
+              <executable>java</executable>
+              <arguments>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>org.openjdk.jmh.Main</argument>
+                <argument>org.openjdk.jmh.Main</argument>
+                <argument>-si</argument>
+                <argument>${benchmark.synchronize-iterations}</argument>
+                <argument>-gc</argument>
+                <argument>${benchmark.gc-between-iterations}</argument>
+                <argument>-foe</argument>
+                <argument>${benchmark.fail-on-error}</argument>
+                <argument>-v</argument>
+                <argument>${benchmark.verbosity}</argument>
+                <argument>-rff</argument>
+                <argument>${benchmark.results-file}</argument>
+                <argument>-jvmArgs</argument>
+                <argument>${benchmark.jvm-args}</argument>
+                <argument>-rf</argument>
+                <argument>${benchmark.results-format}</argument>
+                <argument>-wm</argument>
+                <argument>${benchmark.warmup-mode}</argument>
+                <argument>${benchmarks}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
