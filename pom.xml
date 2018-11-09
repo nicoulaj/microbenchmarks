@@ -75,7 +75,7 @@
     <java.level>1.8</java.level>
 
     <jmh.version>0.6</jmh.version>
-    <commons-math.version>3.2</commons-math.version>
+    <commons-math.version>3.6.1</commons-math.version>
 
     <benchmarks>.*</benchmarks>
     <benchmark.synchronize-iterations>false</benchmark.synchronize-iterations>
